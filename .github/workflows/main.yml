@@ -5,13 +5,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Unpack project
+      - name: Fix layout
         run: |
-          ls -la
-          Z=$(ls *.zip | head -n1)
-          echo "using $Z"
-          unzip -oq "$Z" -d _unz
-          cp -r _unz/invoker-mod/. .
+          J=src/main/java/com/invokermod
+          R=src/main/resources
+          mkdir -p $J $R/assets/invoker/lang $R/assets/invoker/items $R/assets/invoker/models/item $R/data/invoker/recipe
+          for f in *.java; do [ -f "$f" ] && mv "$f" $J/; done
+          [ -f fabric.mod.json ] && mv fabric.mod.json $R/
+          [ -f en_us.json ] && mv en_us.json $R/assets/invoker/lang/
+          [ -f ru_ru.json ] && mv ru_ru.json $R/assets/invoker/lang/
+          for f in spellbook*.json super_spellbook*.json; do
+            [ -f "$f" ] || continue
+            if grep -q 'crafting_shaped\|crafting_shapeless' "$f"; then
+              if grep -q 'invoker:super_spellbook' "$f"; then n=super_spellbook; else n=spellbook; fi
+              mv "$f" "$R/data/invoker/recipe/$n.json"
+            elif grep -q '"parent"' "$f"; then
+              if grep -q written_book "$f"; then n=super_spellbook; else n=spellbook; fi
+              mv "$f" "$R/assets/invoker/models/item/$n.json"
+            else
+              if grep -q 'item/super_spellbook' "$f"; then n=super_spellbook; else n=spellbook; fi
+              mv "$f" "$R/assets/invoker/items/$n.json"
+            fi
+          done
           find src -type f | sort
       - uses: actions/setup-java@v4
         with:
