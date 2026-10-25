@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "invoker",
+  "version": "${version}",
+  "name": "Invoker",
+  "description": "Dota 2 Invoker-style orbs and spells.",
+  "authors": ["you"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.invokermod.InvokerMod"],
+    "client": ["com.invokermod.InvokerClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["DTD", "DBD", "DDD"],
+  "key": {
+    "D": "minecraft:diamond",
+    "T": "minecraft:netherite_upgrade_smithing_template",
+    "B": "invoker:spellbook"
+  },
+  "result": { "id": "invoker:super_spellbook", "count": 1 }
+}
