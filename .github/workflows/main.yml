@@ -1,0 +1,27 @@
+name: build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack project
+        run: |
+          ls -la
+          Z=$(ls *.zip | head -n1)
+          echo "using $Z"
+          unzip -oq "$Z" -d _unz
+          cp -r _unz/invoker-mod/. .
+          find src -type f | sort
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.2.1
+      - run: gradle build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: invoker-mod
+          path: build/libs/*.jar
